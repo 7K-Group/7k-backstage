@@ -92,6 +92,11 @@ techdocs:
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
   environment: local # set this to development to enable SSO
+  # Keep the `ent` ownership claim in issued user tokens (defaults to true
+  # since Backstage 1.50). Our custom OIDC resolvers rely on it.
+  # TODO: upstream will remove this setting in a future release; migrate
+  # ownership lookups to the userInfo core service before then.
+  omitIdentityTokenOwnershipClaim: false
   session:
     secret: abcdfkjalskdfjkla
   providers:
@@ -149,7 +154,8 @@ catalog:
     - type: file
       target: ./examples/local-stack/mock-entities/catalog-info.yaml
       rules:
-        - allow: [Component, System, API, Resource, Location, Template, Group, User]
+        - allow:
+            [Component, System, API, Resource, Location, Template, Group, User]
     - type: url
       target: https://cnoe.localtest.me:8443/gitea/giteaAdmin/idpbuilder-localdev-backstage-templates-entities/src/branch/main/catalog-info.yaml
 
