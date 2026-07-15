@@ -1,5 +1,6 @@
 import { createBackend } from '@backstage/backend-defaults';
 import { authModuleKeycloakOIDCProvider } from './plugins/auth';
+import { authModuleOidcProvider } from './plugins/oidc';
 import { cnoeScaffolderActions } from './modules/scaffolder';
 
 const backend = createBackend();
@@ -77,9 +78,10 @@ if (process.env.KEYCLOAK_URL) {
   backend.add(authModuleKeycloakOIDCProvider);
 }
 
-// Generic OIDC auth (any OIDC-compliant IdP)
+// Generic OIDC auth (any OIDC-compliant IdP; custom module with
+// catalog-aware sign-in and IdP groups claim forwarding)
 if (process.env.OIDC_METADATA_URL) {
-  backend.add(import('@backstage/plugin-auth-backend-module-oidc-provider'));
+  backend.add(authModuleOidcProvider);
 }
 
 // Terraform backend
