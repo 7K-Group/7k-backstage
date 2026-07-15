@@ -3862,9 +3862,7 @@
     zod-validation-error "^4.0.2"
 
 "@backstage/cli@^0.36.0":
-  version "0.36.1"
-  resolved "https://registry.yarnpkg.com/@backstage/cli/-/cli-0.36.1.tgz#305b47894df43300c5f5019e44ab99c8fc1e9b47"
-  integrity sha512-7M9ss4cccqQOF4Xf/IDPj03PnePzQ4QqnSz/E+lpUXS3iJol/Ofdm+nujsvCgqOWTu59CfRTLvX6Hbip+z6S2Q==
+  version "0.36.4"
   dependencies:
     "@backstage/cli-common" "^0.2.1"
     "@backstage/cli-defaults" "^0.1.1"
