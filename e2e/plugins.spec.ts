@@ -4,7 +4,7 @@ async function waitForBackend(page: Page) {
   for (let i = 0; i < 60; i++) {
     try {
       const response = await page.request.get(
-        'http://localhost:7007/api/app/health',
+        'http://localhost:7007/.backstage/health/v1/readiness',
       );
       if (response.ok()) return;
     } catch {
