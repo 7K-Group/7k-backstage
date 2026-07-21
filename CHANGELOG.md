@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/7K-Hiroba/7k-backstage/compare/backstage-app-v1.2.0...backstage-app-v1.3.0) (2026-07-21)
+
+
+### Features
+
+* apply renovate dependency updates ([#29](https://github.com/7K-Hiroba/7k-backstage/issues/29)) ([b111f4b](https://github.com/7K-Hiroba/7k-backstage/commit/b111f4b05b9aeb978ff50989aabf9d817bd687e8))
+
 ## [1.2.0](https://github.com/7K-Hiroba/7k-backstage/compare/backstage-app-v1.1.0...backstage-app-v1.2.0) (2026-07-21)
 
 
