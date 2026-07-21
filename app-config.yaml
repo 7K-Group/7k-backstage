@@ -48,6 +48,10 @@ features:
 
 # CAIPE Agent Forge (AI chat assistant) — points to a running CAIPE instance.
 # See https://github.com/cnoe-io/ai-platform-engineering for deployment options.
+# NOTE: the plugin uses the A2A protocol and requires the CAIPE supervisor
+# endpoint (port 8000, /.well-known/agent.json). The supervisor was removed
+# from the CAIPE Helm chart in 0.5.22, so this only works with CAIPE <= 0.5.21
+# or a manually deployed supervisor. Disabled in app-config.production.yaml.
 agentForge:
   baseUrl: http://127.0.0.1:8000
   # showOptions: true # display pre-defined options based on agent skills
@@ -212,24 +216,36 @@ kubernetes:
           name: local
           authProvider: 'serviceAccount'
           skipTLSVerify: true
+          skipMetricsLookup: true
           serviceAccountToken: eyJhbG......
-          # Additional configuration for Kro resources
+          # Matches Hiroba primitives + common Argo CD CRDs.
+          # NOTE: kro.run ResourceGraphDefinitions are cluster-scoped and surfaced
+          # by the dedicated Kro Details tab, so they are omitted here.
           customResources:
-            - group: 'kro.run'
+            # Hiroba primitives (Crossplane XRDs)
+            - group: 'platform.7kgroup.org'
               apiVersion: 'v1alpha1'
-              plural: 'resourcegraphdefinitions'
-            - group: 'kro.run'
+              plural: 'objectbuckets'
+            - group: 'platform.7kgroup.org'
               apiVersion: 'v1alpha1'
-              plural: 'cicdpipelines'
-            - group: 'kro.run'
+              plural: 'postgresinstances'
+            # Hiroba stacks (KRO ResourceGraphDefinitions)
+            - group: 'platform.7kgroup.org'
               apiVersion: 'v1alpha1'
-              plural: 'eksclusters'
-            - group: 'kro.run'
+              plural: 'observabilitystacks'
+            - group: 'platform.7kgroup.org'
               apiVersion: 'v1alpha1'
-              plural: 'eksclusterwithvpcs'
-            - group: 'kro.run'
+              plural: 'observabilityagents'
+            # Common Argo CD CRDs
+            - group: 'argoproj.io'
               apiVersion: 'v1alpha1'
-              plural: 'vpcs'
+              plural: 'applications'
+            - group: 'argoproj.io'
+              apiVersion: 'v1alpha1'
+              plural: 'appprojects'
+            - group: 'argoproj.io'
+              apiVersion: 'v1alpha1'
+              plural: 'applicationsets'
 
 argocd:
   appLocatorMethods:
@@ -256,6 +272,15 @@ kubernetesIngestor:
         frequency: 300 # 5 minutes in seconds
     instances:
       ingestAllInstances: true
+  # Crossplane XRD template generation. ingestAllXRDs is false by default;
+  # set to true to generate scaffolder templates for all XRDs.
+  crossplane:
+    enabled: true
+    claims:
+      ingestAllClaims: true
+    xrds:
+      enabled: true
+      ingestAllXRDs: true
   # Standard Kubernetes workload ingestion (components.*) intentionally left
   # at plugin defaults. To restrict ingestion to annotated resources only,
   # set components.onlyIngestAnnotatedResources: true.

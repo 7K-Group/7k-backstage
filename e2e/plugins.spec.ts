@@ -151,9 +151,16 @@ test.describe('CNOE Backstage Plugin Tests', () => {
   test('settings page shows theme switcher', async ({ page }) => {
     await page.goto('/settings');
     await expect(page.getByText('Appearance')).toBeVisible({ timeout: 30000 });
+    // Theme ids are the Backstage defaults ('light'/'dark'), so the toggle
+    // shows translated names instead of the custom theme titles.
     await expect(
-      page.getByRole('button', { name: 'CNOE Light' }),
+      page.getByRole('button', { name: 'Light', exact: true }),
     ).toBeVisible();
-    await expect(page.getByRole('button', { name: 'CNOE Dark' })).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Dark', exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Auto', exact: true }),
+    ).toBeVisible();
   });
 });
